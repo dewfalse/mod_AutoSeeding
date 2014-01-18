@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -35,7 +36,7 @@ public class PacketHandler implements IPacketHandler {
 				setBlock(player, index, x, y, z);
 			}
 		} catch (IOException e) {
-			// TODO ©“®¶¬‚³‚ê‚½ catch ƒuƒƒbƒN
+			// TODO è‡ªå‹•ç”Ÿæˆã•ã‚ŒãŸ catch ãƒ–ãƒ­ãƒƒã‚¯
 			e.printStackTrace();
 		}
 	}
@@ -45,8 +46,12 @@ public class PacketHandler implements IPacketHandler {
 		World theWorld = thePlayer.worldObj;
 		ItemStack itemStack = thePlayer.inventory.getStackInSlot(index);
 		Item itemSeeds = itemStack.getItem();
-		if(itemSeeds.onItemUse(itemStack, thePlayer, theWorld, x, y-1, z, 0, 0, 0, 0)) {
-			thePlayer.inventory.setInventorySlotContents(index, itemStack);
+		int blockID = theWorld.getBlockId(x, y, z);
+		int underBlockID = theWorld.getBlockId(x, y-1, z);
+		if(blockID != 0) return;
+		if(underBlockID != Block.tilledField.blockID) return;
+		if(itemSeeds.onItemUse(itemStack, thePlayer, theWorld, x, y-1, z, 1, 0, 0, 0)) {
+			//thePlayer.inventory.decrStackSize(index, 1);
 			thePlayer.inventory.onInventoryChanged();
 			thePlayer.inventoryContainer.detectAndSendChanges();
 		}
