@@ -1,11 +1,10 @@
 package autoseeding;
 
-import java.io.File;
-import java.util.logging.Level;
-
-import net.minecraft.network.INetworkManager;
-import net.minecraftforge.common.Configuration;
 import cpw.mods.fml.common.FMLLog;
+import net.minecraftforge.common.config.Configuration;
+import org.apache.logging.log4j.Level;
+
+import java.io.File;
 
 public class Config {
 	public static final String channel = "as";
@@ -26,7 +25,7 @@ public class Config {
 			}
 			cfg.save();
 		} catch (Exception e) {
-			FMLLog.log(Level.SEVERE, e, "AutoSeeding load config exception");
+			FMLLog.log(Level.ERROR, e, "AutoSeeding load config exception");
 		} finally {
 			cfg.save();
 		}
@@ -46,6 +45,4 @@ public class Config {
 		return mode;
 	}
 
-	public void sendTargetToPlayer(INetworkManager manager) {
-	}
 }
